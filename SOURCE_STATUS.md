@@ -1,3 +1,5 @@
-# Source status
+# Source provenance — version 2
 
-The original project files were not available as a directly mountable source archive at the time of this GitHub migration. The core backend in this repository is a reconstruction based on the project requirements and workflow documented in the project history. It is not presented as a byte-for-byte copy of the original local source.
+On 30 October 2026 this repository received a newly implemented, executable Node.js 24 + SQLite portfolio application. It is new work, not recovery of the missing original coursework archive. The screenshots in `evidence/` were captured from this running version using Chrome through the Work browser. No screenshot is an AI-generated mockup.
+
+Catalog entries and transactions are explicitly test data. This demonstrates application behavior; it does not establish a commercial deployment, actual customers or a real payment integration. Development was performed with AI assistance in ChatGPT Work under Panupong Intasan's direction. Original project history is not evidence that every line was authored independently.

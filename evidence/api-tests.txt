@@ -1,0 +1,12 @@
+✔ checkout, stock, session isolation, duplicate payment and cancellation (46.536062ms)
+✔ invalid quantities, duplicates, stock and rewards leave database unchanged (15.903851ms)
+✔ loyalty counts paid purchases, grants one reward per 10 and redeems once (24.822722ms)
+✔ replacement reservation rolls back on failure and restores stock when valid (8.114331ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 181.373255
