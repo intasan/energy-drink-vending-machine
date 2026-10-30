@@ -1,0 +1,361 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VOLT Drink Station Analysis Documentation</title><meta name="description" content="Requirement Data Flow Data Model Workflow and UAT for VOLT Drink Station"><style>:root{font-family:Arial,Tahoma,sans-serif;color:#202a32;background:#f4f5f5;line-height:1.8}*{box-sizing:border-box}body{margin:0}header{padding:20px max(24px,calc((100vw - 1120px)/2));background:#172d3d;color:white;display:flex;gap:30px;justify-content:space-between;flex-wrap:wrap}header a{color:white}main{max-width:1180px;margin:30px auto;padding:40px;background:white}h1{font-size:30px;line-height:1.5;margin-top:0}h2{font-size:22px;margin:45px 0 18px;padding-top:12px;color:#172d3d}p{margin:15px 0}a{color:#225b7d;text-underline-offset:3px}li{margin:9px 0}table{border-collapse:collapse;width:100%;font-size:13px;line-height:1.7}th,td{border:1px solid #d5dce0;padding:12px 14px;text-align:left;vertical-align:top}th{background:#edf1f3;color:#172d3d}tr:nth-child(even) td{background:#fbfcfd}.table-wrap{overflow:auto;margin:20px 0}img{display:block;width:100%;height:auto;border:1px solid #dde3e7;margin:25px 0}code{background:#eef1f3;padding:2px 4px;overflow-wrap:anywhere}nav{padding:20px 0;display:flex;gap:15px;flex-wrap:wrap;font-size:12px;border-bottom:1px solid #dde3e7}footer{max-width:1120px;margin:auto;padding:20px 0 40px;color:#637480;font-size:12px}.meta{color:#637480;font-size:12px}button{font:inherit;padding:8px 12px;background:white;border:1px solid #aebdc7;cursor:pointer}@media(max-width:700px){main{margin:0;padding:25px 18px}h1{font-size:24px}h2{font-size:20px}table{min-width:680px}header{padding:18px}footer{padding:20px}}@media print{@page{size:A4 landscape;margin:15mm}header,nav,.controls{display:none}body{background:white;font-size:10pt}main{margin:0;padding:0;max-width:none}h1{font-size:22pt}h2{font-size:15pt;break-after:avoid;margin-top:25px}img{max-height:160mm;object-fit:contain;break-inside:avoid}table{font-size:8pt;min-width:0}tr{break-inside:avoid}thead{display:table-header-group}.table-wrap{overflow:visible}a{color:inherit}footer{display:none}}</style></head><body><header><b>Panupong Intasan · System Analysis</b><a href="https://intasan.github.io/portfolio/">กลับ Portfolio ↗</a><a href="https://github.com/intasan/energy-drink-vending-machine/tree/main/docs/analysis">เอกสารและไฟล์ต้นฉบับ GitHub ↗</a></header><main><p class="meta">ANALYSIS DOCUMENT 1.0 · 30 OCTOBER 2026 · SOURCE 5c5e3493</p><nav aria-label="สารบัญเอกสาร"><a href="#section-1">1 เป้าหมาย ผู้ใช้งาน และขอบเขต</a><a href="#section-2">2 วิธีเก็บและยืนยันความต้องการ</a><a href="#section-3">3 Functional Requirements และเกณฑ์ยอมรับ</a><a href="#section-4">4 Business Rules</a><a href="#section-5">5 Non Functional Requirements</a><a href="#section-6">6 Context Diagram</a><a href="#section-7">7 Data Flow Diagram และทะเบียนข้อมูล</a><a href="#section-8">8 Workflow</a><a href="#section-9">9 Data Model และ Data Dictionary</a><a href="#section-10">10 UAT และ Requirement Traceability</a><a href="#section-11">11 ข้อจำกัดและความเสี่ยง</a><a href="#section-12">12 คำถามที่ต้องยืนยันก่อนขยายระบบ</a><a href="#section-13">13 Source Baseline และประวัติเอกสาร</a></nav><h1>VOLT Drink Station เอกสารวิเคราะห์ความต้องการและออกแบบระบบ</h1>
+<p>รุ่นเอกสาร 1.0 · วันที่ 30 October 2026 · ผู้จัดทำ Panupong Intasan โดยใช้ AI assistance ใน ChatGPT Work</p>
+<p>ให้ผู้ใช้เลือกเครื่องดื่ม ตรวจยอด สร้างคำสั่งซื้อ และติดตามคะแนนได้ในเบราว์เซอร์ โดยตรวจสต็อกและคำนวณยอดจากเซิร์ฟเวอร์ ระบบนี้เป็นแอปทดลองที่บันทึกรายการจริงใน SQLite ไม่เชื่อมเครื่องจำหน่ายหรือธนาคาร</p>
+<p><strong>สถานะเอกสาร:</strong> จัดทำใหม่จากการอ่านโค้ด ณ commit <code>5c5e3493facc401d21b52cf6cb7a78693f58810d</code> เพื่ออธิบายระบบและใช้ตรวจรับ ไม่ใช่บันทึกการสัมภาษณ์หรือหลักฐานว่าผู้มีส่วนได้ส่วนเสียอนุมัติ Requirement แล้ว รายการที่ยังต้องตัดสินใจอยู่ในหัวข้อคำถามยืนยัน</p>
+<p><a href="https://intasan.github.io/portfolio/analysis/vending/index.html">อ่านฉบับเว็บบน Portfolio</a> · <a href="analysis.html">ไฟล์ HTML</a> · <a href="diagrams/">Diagram source</a></p>
+<h2 id="section-1">1 เป้าหมาย ผู้ใช้งาน และขอบเขต</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ผู้เกี่ยวข้อง</th>
+<th>หน้าที่</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ผู้ซื้อในเบราว์เซอร์</td>
+<td>เลือกสินค้า ตรวจยอด ยืนยันชำระทดลอง ยกเลิก และดูประวัติ</td>
+</tr>
+<tr>
+<td>ผู้ดูแลโครงการ</td>
+<td>ติดตั้งระบบ ดูแลไฟล์ฐานข้อมูลและเรียกใช้ชุดทดสอบ ไม่มีหน้า Admin ในรุ่นนี้</td>
+</tr>
+</tbody></table></div>
+<p><strong>อยู่ในขอบเขต:</strong> Catalog, Cart, Order, Test payment, Stock reservation, Loyalty และประวัติตาม anonymous session</p>
+<p><strong>อยู่นอกขอบเขต:</strong> PromptPay จริง การตัดเงิน การจ่ายสินค้าจากฮาร์ดแวร์ บัญชีสมาชิกข้ามอุปกรณ์ และระบบจัดการสินค้า</p>
+<h2 id="section-2">2 วิธีเก็บและยืนยันความต้องการ</h2>
+<p>เอกสารรอบนี้ใช้ source review, schema review และผลทดสอบที่มีอยู่เป็น input ข้อกำหนดแบบ As implemented ใช้อธิบายพฤติกรรมที่พบในโค้ด ส่วน To be เป็นข้อเสนอหรือคำถามที่ยังไม่ได้อนุมัติ ไม่มีการสร้างชื่อผู้ให้สัมภาษณ์ วันประชุม หรือผลลงนามย้อนหลัง</p>
+<p>กระบวนการยืนยันที่เสนอคือให้ผู้ใช้งานหลักทบทวน scope และ Business Rules จากนั้นเดินผ่าน scenario ปกติและข้อผิดพลาด บันทึกคำตอบพร้อมผู้ตัดสินใจ แล้วปรับ version ของ Requirement และ UAT ก่อนรับรองการใช้งานจริง</p>
+<h2 id="section-3">3 Functional Requirements และเกณฑ์ยอมรับ</h2>
+<p>ทุกแถวต่อไปนี้เป็น <strong>As implemented จากโค้ด</strong> คอลัมน์หลักฐานแยกสิ่งที่มีการทดสอบเดิมกับสิ่งที่เพียงพบใน source การจัดทำเอกสารไม่ได้ทำให้ผลทดสอบที่ยังรออยู่กลายเป็นผ่าน</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>รหัส</th>
+<th>ความต้องการ</th>
+<th>เกณฑ์ยอมรับ</th>
+<th>Source</th>
+<th>หลักฐานหรือสถานะ</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V-FR01</td>
+<td>อ่านรายการสินค้าและสต็อกจาก SQLite</td>
+<td>GET /api/products คืนชื่อ ราคา และ stock ตามฐานข้อมูล</td>
+<td>server.js</td>
+<td>API / browser เดิม</td>
+</tr>
+<tr>
+<td>V-FR02</td>
+<td>เพิ่ม ลด และนำสินค้าออกจากตะกร้า</td>
+<td>จำนวนใน UI และยอดรวมเปลี่ยนตามรายการที่เลือก</td>
+<td>public/app.js</td>
+<td>browser เดิม เฉพาะเพิ่มสินค้า</td>
+</tr>
+<tr>
+<td>V-FR03</td>
+<td>สร้างคำสั่งซื้อด้วยราคาฝั่งเซิร์ฟเวอร์</td>
+<td>ไม่ใช้ราคาที่ client ส่งมา และสร้างสถานะ pending เมื่อข้อมูลผ่าน</td>
+<td>server.js</td>
+<td>tests/orders.test.js</td>
+</tr>
+<tr>
+<td>V-FR04</td>
+<td>ป้องกันจำนวนไม่ถูกต้องและสินค้าซ้ำ</td>
+<td>จำนวนเป็นจำนวนเต็ม 1–10 ต่อสินค้า ไม่เกินสต็อก รายการ 1–3 ชนิดและ id ไม่ซ้ำ</td>
+<td>server.js</td>
+<td>tests/orders.test.js</td>
+</tr>
+<tr>
+<td>V-FR05</td>
+<td>กันสต็อกพร้อมคำสั่งซื้อแบบ transaction</td>
+<td>สร้าง order และลด stock สำเร็จพร้อมกัน หรือ rollback ทั้งชุด</td>
+<td>server.js</td>
+<td>tests/orders.test.js</td>
+</tr>
+<tr>
+<td>V-FR06</td>
+<td>แทนที่ pending order ของ session เดิม</td>
+<td>คืนสต็อกเดิมแล้วสร้างใหม่ใน transaction เดียว ความล้มเหลวต้องคง pending เดิม</td>
+<td>server.js</td>
+<td>tests/orders.test.js</td>
+</tr>
+<tr>
+<td>V-FR07</td>
+<td>ชำระทดลองได้ครั้งเดียว</td>
+<td>pending → paid เท่านั้น การชำระซ้ำตอบ 409 และไม่เพิ่มคะแนนซ้ำ</td>
+<td>server.js</td>
+<td>tests/orders.test.js / browser เดิม</td>
+</tr>
+<tr>
+<td>V-FR08</td>
+<td>ยกเลิก pending order และคืนสต็อก</td>
+<td>เจ้าของรายการยกเลิกได้ และสถานะเปลี่ยนเป็น cancelled</td>
+<td>server.js</td>
+<td>tests/orders.test.js</td>
+</tr>
+<tr>
+<td>V-FR09</td>
+<td>สะสมและแลกเครื่องดื่มฟรี</td>
+<td>ทุก 10 paid orders ได้ 1 reward ใช้ลดราคาหน่วยที่ถูกที่สุดในตะกร้า</td>
+<td>server.js</td>
+<td>tests/orders.test.js</td>
+</tr>
+<tr>
+<td>V-FR10</td>
+<td>ดูเฉพาะประวัติของ session ปัจจุบัน</td>
+<td>GET /api/me คืนประวัติและคะแนนของ customer ที่ผูก cookie การเปลี่ยนรายการผู้อื่นถูกปฏิเสธ</td>
+<td>server.js</td>
+<td>tests/orders.test.js</td>
+</tr>
+</tbody></table></div>
+<h2 id="section-4">4 Business Rules</h2>
+<ol>
+<li>หนึ่งคำสั่งซื้อ paid ได้ 1 stamp ไม่ใช่ 1 stamp ต่อกระป๋อง</li>
+<li>visits เก็บเศษรอบ 0–9; rewards เก็บจำนวนสิทธิ์คงเหลือ</li>
+<li>ยอดรวม = Σ(price × quantity) − ราคาหน่วยต่ำสุด เมื่อเลือกใช้สิทธิ์และมีสิทธิ์เพียงพอ</li>
+<li>สิทธิ์ถูกใช้เมื่อชำระสำเร็จ ไม่ถูกหักเพียงเพราะเปิดหน้าตรวจยอด</li>
+<li>pending order ไม่มีเวลาหมดอายุอัตโนมัติในรุ่นปัจจุบัน การกันสต็อกจึงค้างจนยกเลิกหรือแทนที่</li>
+</ol>
+<h2 id="section-5">5 Non Functional Requirements</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>รหัส</th>
+<th>ประเด็น</th>
+<th>เกณฑ์และสถานะ</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>vending-NFR01</td>
+<td>Data integrity</td>
+<td>ใช้การตรวจสอบ input และการบันทึกที่สอดคล้องกับ business rules; ดูข้อจำกัดรายโครงการด้านล่าง</td>
+</tr>
+<tr>
+<td>vending-NFR02</td>
+<td>Access control</td>
+<td>ตรวจสิทธิ์ที่ server ตาม actor และ endpoint; ไม่อ้างสิทธิ์ที่ระบบยังไม่มี</td>
+</tr>
+<tr>
+<td>vending-NFR03</td>
+<td>Observability</td>
+<td>ต้องอธิบาย error / unavailable และ provenance ที่มีอยู่; audit trail แบบสมบูรณ์ยังไม่ถือว่ามี</td>
+</tr>
+<tr>
+<td>vending-NFR04</td>
+<td>Usability</td>
+<td>เสนอให้ทดสอบ desktop และ mobile ตั้งแต่ 360 px พร้อม keyboard; ยังไม่มีผลตรวจครบทุกขนาด</td>
+</tr>
+<tr>
+<td>vending-NFR05</td>
+<td>Performance</td>
+<td>ยังไม่มี SLA ที่ผู้เกี่ยวข้องอนุมัติ ต้องกำหนดจำนวนผู้ใช้และเกณฑ์ response time ก่อน load test</td>
+</tr>
+<tr>
+<td>vending-NFR06</td>
+<td>Recovery</td>
+<td>เสนอให้ทดสอบสำรองและกู้คืนข้อมูลพร้อมไฟล์ที่สัมพันธ์กัน; RPO/RTO ยังต้องตกลง ไม่กำหนดตัวเลขแทนผู้ใช้</td>
+</tr>
+</tbody></table></div>
+<h2 id="section-6">6 Context Diagram</h2>
+<p><img src="diagrams/context.svg" alt="Context Diagram"></p>
+<p>อ่านร่วมกับ <a href="diagrams/context.mmd">Mermaid context source</a> ซึ่งแสดงข้อมูลขาเข้าและขาออกแยกทิศทาง Context Diagram กำหนดขอบเขตระบบทั้งก้อน ไม่แสดง data store ภายใน</p>
+<h2 id="section-7">7 Data Flow Diagram และทะเบียนข้อมูล</h2>
+<p><img src="diagrams/data-flow.svg" alt="Data flow process overview"></p>
+<p>ภาพ SVG เป็น process overview แบบย่อ ส่วน <a href="diagrams/data-flow.mmd">DFD Mermaid source</a> และทะเบียนด้านล่างแสดงทิศทาง request/response และ data store อย่างละเอียด ห้ามตีความลูกศรเป็นลำดับเวลาดำเนินงานอย่างเดียว</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Flow</th>
+<th>ต้นทาง</th>
+<th>ปลายทาง</th>
+<th>ข้อมูลที่ส่งไป</th>
+<th>ข้อมูลตอบกลับ</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>D01</td>
+<td>ผู้ซื้อ</td>
+<td>1.0 Catalog</td>
+<td>คำขอสินค้า</td>
+<td>รายการสินค้าและ stock</td>
+</tr>
+<tr>
+<td>D02</td>
+<td>ผู้ซื้อ</td>
+<td>2.0 Order</td>
+<td>id และ quantity / redeem</td>
+<td>pending order หรือ validation error</td>
+</tr>
+<tr>
+<td>D03</td>
+<td>2.0 Order</td>
+<td>D1 Products</td>
+<td>อ่านราคาจริงและ stock; ลด/คืน stock</td>
+<td>ราคากับ stock ปัจจุบัน</td>
+</tr>
+<tr>
+<td>D04</td>
+<td>2.0 Order</td>
+<td>D2 Orders Customers Sessions</td>
+<td>สร้าง/อ่าน order; ปรับสถานะ stamp/reward</td>
+<td>order และสิทธิ์ของ session</td>
+</tr>
+<tr>
+<td>D05</td>
+<td>ผู้ซื้อ</td>
+<td>2.0 Order</td>
+<td>pay/cancel พร้อม cookie</td>
+<td>paid/cancelled หรือ 404/409</td>
+</tr>
+</tbody></table></div>
+<h2 id="section-8">8 Workflow</h2>
+<p><img src="diagrams/workflow.svg" alt="Workflow"></p>
+<ol>
+<li>เลือกสินค้าและจำนวน</li>
+<li>สร้าง pending และกันสต็อก</li>
+<li>ตรวจคำสั่งซื้อ</li>
+<li>ชำระทดลอง หรือยกเลิก</li>
+<li>บันทึกสถานะและคะแนน หรือคืนสต็อก</li>
+</ol>
+<p>ข้อผิดพลาดต้องส่งผลตาม Requirement ที่เกี่ยวข้องและไม่ข้ามการตรวจสิทธิ์หรือความถูกต้องของข้อมูล <a href="diagrams/workflow.mmd">แก้ไข Mermaid workflow</a></p>
+<h2 id="section-9">9 Data Model และ Data Dictionary</h2>
+<p><img src="diagrams/data-model.svg" alt="Data model"></p>
+<p>แบบจำลองแสดง core entities ตาม schema ที่ตรวจอ่าน ความสัมพันธ์ที่แอปคาดหวังอาจเข้มกว่าข้อจำกัด nullable ของฐานข้อมูล จึงต้องอ่าน DDL และ validation ประกอบ</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Entity หรือ data store</th>
+<th>ข้อมูลหลัก</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CUSTOMERS</td>
+<td>id PK; visits INTEGER; rewards INTEGER</td>
+</tr>
+<tr>
+<td>SESSIONS</td>
+<td>token PK; customer FK</td>
+</tr>
+<tr>
+<td>ORDERS</td>
+<td>id PK; customer FK; items JSON text; total INTEGER THB; status / redeemed; created_at ISO text</td>
+</tr>
+<tr>
+<td>PRODUCTS</td>
+<td>id PK; name / flavour; price INTEGER THB; stock INTEGER &gt;= 0; color</td>
+</tr>
+</tbody></table></div>
+<p><code>orders.items</code> เก็บ JSON text ของรายการ id/name/price/quantity ซึ่งเป็น snapshot ณ เวลาสั่ง ไม่มีตาราง order_items และไม่มี FK ระหว่าง JSON กับ products แม้แอปจะตรวจ id ก่อนบันทึก</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parent</th>
+<th>Child</th>
+<th>Relationship</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CUSTOMERS</td>
+<td>SESSIONS</td>
+<td>1 to many</td>
+</tr>
+<tr>
+<td>CUSTOMERS</td>
+<td>ORDERS</td>
+<td>1 to many</td>
+</tr>
+</tbody></table></div>
+<p><a href="diagrams/data-model.mmd">Mermaid data model source</a></p>
+<h2 id="section-10">10 UAT และ Requirement Traceability</h2>
+<p>ตารางนี้เป็น test design และ mapping กับหลักฐานที่มี การผ่าน unit/API test ไม่เท่ากับผู้ใช้ปลายทางลงนาม UAT</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Test ID</th>
+<th>Requirement</th>
+<th>ขั้นตอนหรือ input</th>
+<th>ผลคาดหวัง</th>
+<th>สถานะหลักฐาน</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V-UAT01</td>
+<td>V-FR03 V-FR05</td>
+<td>Citrus 2 หน่วย ราคา 25</td>
+<td>ยอด 50 และ stock ลด 2</td>
+<td>ผ่าน API เดิม</td>
+</tr>
+<tr>
+<td>V-UAT02</td>
+<td>V-FR04</td>
+<td>ส่งจำนวน 0 เศษส่วน สินค้าซ้ำ หรือเกิน 10</td>
+<td>ปฏิเสธโดยไม่เปลี่ยนสต็อก</td>
+<td>ผ่าน API เดิม</td>
+</tr>
+<tr>
+<td>V-UAT03</td>
+<td>V-FR07</td>
+<td>กดยืนยัน pay ซ้ำ</td>
+<td>409 และ stamp ไม่เพิ่มซ้ำ</td>
+<td>ผ่าน API เดิม</td>
+</tr>
+<tr>
+<td>V-UAT04</td>
+<td>V-FR08</td>
+<td>ยกเลิก pending</td>
+<td>stock คืนตามจำนวนที่กัน</td>
+<td>ผ่าน API เดิม</td>
+</tr>
+<tr>
+<td>V-UAT05</td>
+<td>V-FR09</td>
+<td>ซื้อและจ่าย 10 คำสั่ง แล้วแลก 1 สิทธิ์</td>
+<td>ได้ 1 reward และใช้สิทธิ์ได้ครั้งเดียว</td>
+<td>ผ่าน API เดิม</td>
+</tr>
+<tr>
+<td>V-UAT06</td>
+<td>V-FR10</td>
+<td>อีก session พยายามจ่ายคำสั่งซื้อเดิม</td>
+<td>404 ไม่มีการเปลี่ยนรายการ</td>
+<td>ผ่าน API เดิม</td>
+</tr>
+</tbody></table></div>
+<p><strong>ผู้ตรวจรับ:</strong> ยังไม่กำหนด · <strong>วันที่ตรวจรับกับผู้ใช้:</strong> ยังไม่ดำเนินการในรอบเอกสารนี้ · <strong>ผลลงนาม:</strong> ยังไม่มี</p>
+<h2 id="section-11">11 ข้อจำกัดและความเสี่ยง</h2>
+<ul>
+<li>ไม่มี expiry, rate limiting หรือการกู้คืนบัญชี จึงยังไม่พร้อมเปิด commerce สาธารณะ</li>
+<li>ต้องทดสอบบนมือถือและทดสอบปิดโปรเซสแล้วเปิดใหม่ก่อนรับรองการใช้งานระยะยาว</li>
+</ul>
+<h2 id="section-12">12 คำถามที่ต้องยืนยันก่อนขยายระบบ</h2>
+<ol>
+<li>จะให้ pending order หมดอายุภายในกี่นาที และคืนสต็อกโดยกระบวนการใด</li>
+<li>สิทธิ์ฟรีควรนับจากจำนวนครั้งหรือจำนวนหน่วย และยอดศูนย์ยังได้ stamp หรือไม่</li>
+<li>ต้องมีบัญชีสมาชิกเพื่อกู้คืนคะแนนเมื่อ cookie หายหรือไม่</li>
+<li>จะเพิ่ม Admin และบันทึกประวัติปรับสต็อกอย่างไร</li>
+<li>หากเชื่อมธนาคารภายหลัง ต้องตรวจ webhook และ idempotency อย่างไร</li>
+</ol>
+<h2 id="section-13">13 Source Baseline และประวัติเอกสาร</h2>
+<ul>
+<li><a href="https://github.com/intasan/energy-drink-vending-machine/blob/5c5e3493facc401d21b52cf6cb7a78693f58810d/server.js">server.js</a></li>
+<li><a href="https://github.com/intasan/energy-drink-vending-machine/blob/5c5e3493facc401d21b52cf6cb7a78693f58810d/public/app.js">public/app.js</a></li>
+<li><a href="https://github.com/intasan/energy-drink-vending-machine/blob/5c5e3493facc401d21b52cf6cb7a78693f58810d/tests/orders.test.js">tests/orders.test.js</a></li>
+<li><a href="https://github.com/intasan/energy-drink-vending-machine/blob/5c5e3493facc401d21b52cf6cb7a78693f58810d/ACCEPTANCE.md">ACCEPTANCE.md</a></li>
+<li><a href="https://github.com/intasan/energy-drink-vending-machine/blob/5c5e3493facc401d21b52cf6cb7a78693f58810d/evidence/api-tests.txt">evidence/api-tests.txt</a></li>
+</ul>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Version</th>
+<th>วันที่</th>
+<th>รายการเปลี่ยนแปลง</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1.0</td>
+<td>30 October 2026</td>
+<td>จัดทำ requirement catalogue, data flow register, diagrams, data dictionary และ UAT traceability จาก source baseline</td>
+</tr>
+</tbody></table></div>
+<p>เอกสารวิเคราะห์และไดอะแกรมเป็น deliverable ใหม่ ไม่ใช่ภาพหน้าจอหรือหลักฐานผลการทำงานที่ยังไม่ได้ทดสอบ ไม่มีการอ่านหรือแก้ repository ที่ผู้ใช้ระบุให้ยกเว้น</p>
+</main><footer>เอกสารวิเคราะห์จาก source baseline ไม่ใช่บันทึกสัมภาษณ์หรือการรับรอง UAT ที่ยังไม่ได้ดำเนินการ</footer></body></html>

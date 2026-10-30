@@ -55,3 +55,9 @@ Browser checks also confirmed stock 24→23 / 18→17 and loyalty 0→1 after re
 No PromptPay QR, bank callback, physical dispensing, admin system or public production hosting. Sessions and unpaid reservations currently have no automatic expiry, and there is no rate limiting or account recovery. This version is suitable for local portfolio testing, not public unattended commerce. Inventory, products and purchase history are test records. Desktop browser workflow was exercised; mobile devices and full accessibility audits are not yet verified.
 
 See [source provenance](SOURCE_STATUS.md) and [acceptance checks](ACCEPTANCE.md).
+
+## เอกสารวิเคราะห์ระบบ
+
+[Requirement และเอกสารออกแบบระบบ](docs/analysis/README.md) · [HTML ฉบับอ่าน](docs/analysis/analysis.html) · [SVG และ Mermaid ที่แก้ไขได้](docs/analysis/diagrams/)
+
+ชุดเอกสารจัดทำใหม่จาก source baseline วันที่ 30 ตุลาคม 2026 มี Functional Requirements, Business Rules, Context Diagram, DFD, Workflow, Data Model, Data Dictionary และ UAT traceability แยกสถานะที่พบในโค้ดออกจากสิ่งที่ผ่านการทดสอบและสิ่งที่ยังต้องยืนยันกับผู้ใช้ ไม่ใช่บันทึกสัมภาษณ์หรือเอกสารรับรองย้อนหลัง

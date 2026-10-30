@@ -1,0 +1,16 @@
+flowchart TD
+  N0["ผู้ซื้อ"]
+  N1["1.0 Catalog"]
+  N2["2.0 Order"]
+  N3["D1 Products"]
+  N4["D2 Orders Customers Sessions"]
+  N0 -->|"D01 คำขอสินค้า"| N1
+  N1 -->|"รายการสินค้าและ stock"| N0
+  N0 -->|"D02 id และ quantity / redeem"| N2
+  N2 -->|"pending order หรือ validation error"| N0
+  N2 -->|"D03 อ่านราคาจริงและ stock; ลด/คืน stock"| N3
+  N3 -->|"ราคากับ stock ปัจจุบัน"| N2
+  N2 -->|"D04 สร้าง/อ่าน order; ปรับสถานะ stamp/reward"| N4
+  N4 -->|"order และสิทธิ์ของ session"| N2
+  N0 -->|"D05 pay/cancel พร้อม cookie"| N2
+  N2 -->|"paid/cancelled หรือ 404/409"| N0

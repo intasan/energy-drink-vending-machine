@@ -1,0 +1,29 @@
+erDiagram
+  CUSTOMERS |o--o{ SESSIONS : references
+  CUSTOMERS |o--o{ ORDERS : references
+  CUSTOMERS {
+    TEXT id PK
+    INTEGER visits 
+    INTEGER rewards 
+  }
+  SESSIONS {
+    TEXT token PK
+    TEXT customer FK
+  }
+  ORDERS {
+    TEXT id PK
+    TEXT customer FK
+    TEXT items 
+    INTEGER total 
+    TEXT status 
+    INTEGER redeemed 
+    TEXT created_at 
+  }
+  PRODUCTS {
+    TEXT id PK
+    TEXT name 
+    TEXT flavour 
+    INTEGER price 
+    INTEGER stock 
+    TEXT color 
+  }

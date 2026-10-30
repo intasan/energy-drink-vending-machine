@@ -1,0 +1,15 @@
+{
+  "title": "VOLT Drink Station",
+  "repo": "energy-drink-vending-machine",
+  "slug": "vending",
+  "head": "5c5e3493facc401d21b52cf6cb7a78693f58810d",
+  "document_version": "1.0",
+  "date": "2026-10-30",
+  "requirements": 10,
+  "diagrams": [
+    "context",
+    "data-flow",
+    "workflow",
+    "data-model"
+  ]
+}
