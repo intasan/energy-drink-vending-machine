@@ -1,0 +1,26 @@
+{
+  "repository": "intasan/energy-drink-vending-machine",
+  "source_commit": "fbecce9a7e3a1d9fc61d828613d237104fdef986",
+  "inspected_at": "2026-10-30T17:50:43.679787+00:00",
+  "tracked_file_count": 28,
+  "checks": [
+    {
+      "file": "public/app.js",
+      "check": "JavaScript syntax only",
+      "ok": true,
+      "error": ""
+    },
+    {
+      "file": "server.js",
+      "check": "JavaScript syntax only",
+      "ok": true,
+      "error": ""
+    },
+    {
+      "file": "tests/orders.test.js",
+      "check": "JavaScript syntax only",
+      "ok": true,
+      "error": ""
+    }
+  ]
+}

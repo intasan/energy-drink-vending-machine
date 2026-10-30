@@ -1,0 +1,20 @@
+UNIT TESTS: explicitly isolated in-memory fixtures; not real business data. No runtime seed catalog.
+
+> energy-drink-vending-machine@2.0.0 test
+> node --test tests/*.test.js
+
+✔ checkout, stock, session isolation, duplicate payment and cancellation (61.733043ms)
+✔ invalid quantities, duplicates, stock and rewards leave database unchanged (19.282966ms)
+✔ loyalty counts paid purchases, grants one reward per 10 and redeems once (32.827687ms)
+✔ replacement reservation rolls back on failure and restores stock when valid (10.659534ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 229.952001
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+exit_code=0

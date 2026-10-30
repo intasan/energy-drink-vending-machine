@@ -1,0 +1,5 @@
+server.js syntax exit=0
+
+public/app.js syntax exit=0
+
+tests/orders.test.js syntax exit=0

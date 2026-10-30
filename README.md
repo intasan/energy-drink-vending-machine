@@ -61,3 +61,8 @@ See [source provenance](SOURCE_STATUS.md) and [acceptance checks](ACCEPTANCE.md)
 [Requirement และเอกสารออกแบบระบบ](docs/analysis/README.md) · [HTML ฉบับอ่าน](docs/analysis/analysis.html) · [SVG และ Mermaid ที่แก้ไขได้](docs/analysis/diagrams/)
 
 ชุดเอกสารจัดทำใหม่จาก source baseline วันที่ 30 ตุลาคม 2026 มี Functional Requirements, Business Rules, Context Diagram, DFD, Workflow, Data Model, Data Dictionary และ UAT traceability แยกสถานะที่พบในโค้ดออกจากสิ่งที่ผ่านการทดสอบและสิ่งที่ยังต้องยืนยันกับผู้ใช้ ไม่ใช่บันทึกสัมภาษณ์หรือเอกสารรับรองย้อนหลัง
+
+
+## ขอบเขตรอบตรวจล่าสุด
+
+Runtime ไม่สร้าง sample catalog อัตโนมัติ ต้องมีฐานข้อมูลธุรกิจจริงที่ตรวจสอบแล้ว Unit tests ใช้ fixture ใน SQLite หน่วยความจำแยกจาก runtime เท่านั้น ภาพธุรกรรมเก่าใน evidence เป็น fixture run ไม่ใช่ธุรกรรมจริง อ่าน [สถานะและเกณฑ์ตรวจรับ](docs/VERIFIED_SCOPE.md)

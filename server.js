@@ -2,15 +2,17 @@ const http=require('node:http');
 const {DatabaseSync}=require('node:sqlite');
 const {randomUUID,randomBytes}=require('node:crypto');
 const fs=require('node:fs');const path=require('node:path');
-function createApp(dbFile=process.env.DB_FILE||path.join(__dirname,'data','vending.sqlite')){
+function createApp(dbFile=process.env.DB_FILE||path.join(__dirname,'data','vending.sqlite'), options={}){
  if(dbFile!==':memory:')fs.mkdirSync(path.dirname(dbFile),{recursive:true});
  const db=new DatabaseSync(dbFile);db.exec(`PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL;
  CREATE TABLE IF NOT EXISTS products(id TEXT PRIMARY KEY,name TEXT,flavour TEXT,price INTEGER,stock INTEGER CHECK(stock>=0),color TEXT);
  CREATE TABLE IF NOT EXISTS customers(id TEXT PRIMARY KEY,visits INTEGER DEFAULT 0,rewards INTEGER DEFAULT 0);
  CREATE TABLE IF NOT EXISTS orders(id TEXT PRIMARY KEY,customer TEXT REFERENCES customers(id),items TEXT,total INTEGER,status TEXT,redeemed INTEGER,created_at TEXT);
  CREATE TABLE IF NOT EXISTS sessions(token TEXT PRIMARY KEY,customer TEXT REFERENCES customers(id));`);
+ if(options.testCatalog===true && dbFile===':memory:'){
  const seed=db.prepare('INSERT OR IGNORE INTO products VALUES (?,?,?,?,?,?)');
  [['citrus','CITRUS CHARGE','Lemon / lime',25,24,'#e4ef75'],['berry','BERRY VOLT','Mixed berries',30,18,'#f4a6c1'],['original','ORIGINAL BOOST','Classic energy',20,30,'#9ed5ee']].forEach(x=>seed.run(...x));
+ }
  function tx(fn){db.exec('BEGIN IMMEDIATE');try{const r=fn();db.exec('COMMIT');return r}catch(e){db.exec('ROLLBACK');throw e}}
  function error(msg,status=400){throw Object.assign(new Error(msg),{status})}
  const server=http.createServer(async(req,res)=>{const json=(status,x)=>{res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(JSON.stringify(x))};
